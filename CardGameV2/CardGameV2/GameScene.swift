@@ -58,6 +58,18 @@ class GameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             if let card = atPoint(location) as? Card {
+//                let wiggleIn = SKAction.scaleX(to: 1.0, duration: 0.2)
+//                let wiggleOut = SKAction.scaleX(to: 1.2, duration: 0.2)
+//                let wiggle = SKAction.sequence([wiggleIn, wiggleOut])
+//                
+//                card.run(SKAction.repeatForever(wiggle), withKey: "wiggle")
+                
+                let rotR = SKAction.rotate(byAngle: 0.15, duration: 0.2)
+                let rotL = SKAction.rotate(byAngle: -0.15, duration: 0.2)
+                let cycle = SKAction.sequence([rotR, rotL, rotL, rotR])
+                let wiggle = SKAction.repeatForever(cycle)
+                card.run(wiggle, withKey: "rotate")
+                
                 card.zPosition = CardLevel.moving.rawValue
                 
                 card.removeAction(forKey: "drop")
@@ -74,6 +86,9 @@ class GameScene: SKScene {
                 card.removeFromParent()
                 addChild(card)
                 
+//                card.removeAction(forKey: "wiggle")
+                card.run(SKAction.rotate(toAngle: 0, duration: 0.2), withKey:"rotate")
+
                 card.removeAction(forKey: "pickup")
                 card.run(SKAction.scale(to: 1.0, duration: 0.25), withKey: "drop")
             }
