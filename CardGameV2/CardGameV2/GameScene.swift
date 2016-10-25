@@ -49,6 +49,8 @@ class GameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)           // 1
             if let card = atPoint(location) as? Card {        // 2
+                if card.enlarged { return }
+                
                 card.position = location
             }
         }
@@ -59,9 +61,16 @@ class GameScene: SKScene {
             let location = touch.location(in: self)
             if let card = atPoint(location) as? Card {
                 
+//                if touch.tapCount > 1 {
+//                    card.flip()
+//                }
+                
                 if touch.tapCount > 1 {
-                    card.flip()
+                    card.enlarge()
+                    return
                 }
+                
+                if card.enlarged { return }
                 
 //                let wiggleIn = SKAction.scaleX(to: 1.0, duration: 0.2)
 //                let wiggleOut = SKAction.scaleX(to: 1.2, duration: 0.2)
@@ -87,6 +96,8 @@ class GameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             if let card = atPoint(location) as? Card {
+                if card.enlarged { return }
+                
                 card.zPosition = CardLevel.board.rawValue
                 card.removeFromParent()
                 addChild(card)
