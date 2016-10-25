@@ -22,6 +22,12 @@
 
 import SpriteKit
 
+enum CardLevel :CGFloat {
+    case board = 10
+    case moving = 100
+    case enlarged = 200
+}
+
 class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
@@ -39,4 +45,32 @@ class GameScene: SKScene {
         addChild(bear)
     }
     
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)           // 1
+            if let card = atPoint(location) as? Card {        // 2
+                card.position = location
+            }
+        }
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            if let card = atPoint(location) as? Card {
+                card.zPosition = CardLevel.moving.rawValue
+            }
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            if let card = atPoint(location) as? Card {
+                card.zPosition = CardLevel.board.rawValue
+                card.removeFromParent()
+                addChild(card)
+            }
+        }
+    }
 }
