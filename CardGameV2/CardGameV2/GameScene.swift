@@ -58,6 +58,11 @@ class GameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             if let card = atPoint(location) as? Card {
+                
+                if touch.tapCount > 1 {
+                    card.flip()
+                }
+                
 //                let wiggleIn = SKAction.scaleX(to: 1.0, duration: 0.2)
 //                let wiggleOut = SKAction.scaleX(to: 1.2, duration: 0.2)
 //                let wiggle = SKAction.sequence([wiggleIn, wiggleOut])

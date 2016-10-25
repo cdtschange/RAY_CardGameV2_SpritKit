@@ -33,6 +33,8 @@ class Card : SKSpriteNode {
     let frontTexture :SKTexture
     let backTexture :SKTexture
     
+    var faceUp = true
+
     var damage = 0
     let damageLabel :SKLabelNode
     
@@ -63,5 +65,38 @@ class Card : SKSpriteNode {
         super.init(texture: frontTexture, color: .clear, size: frontTexture.size())
         
         addChild(damageLabel)
+    }
+    
+    func flip() {
+//        if faceUp {
+//            self.texture = backTexture
+//            damageLabel.isHidden = true
+//        } else {
+//            self.texture = frontTexture
+//            damageLabel.isHidden = false
+//        }
+//        faceUp = !faceUp
+        
+        let firstHalfFlip = SKAction.scaleX(to: 0.0, duration: 0.4)
+        let secondHalfFlip = SKAction.scaleX(to: 1.0, duration: 0.4)
+        
+        setScale(1.0)
+        
+        if faceUp {
+            run(firstHalfFlip) {
+                self.texture = self.backTexture
+                self.damageLabel.isHidden = true
+                
+                self.run(secondHalfFlip)
+            }
+        } else {
+            run(firstHalfFlip) {
+                self.texture = self.frontTexture
+                self.damageLabel.isHidden = false
+                
+                self.run(secondHalfFlip)
+            }
+        }
+        faceUp = !faceUp
     }
 }
